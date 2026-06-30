@@ -1,6 +1,5 @@
 import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory } from '@capacitor/filesystem'
-import { Share } from '@capacitor/share'
 
 export async function downloadBlob(blob: Blob, filename: string) {
   if (Capacitor.isNativePlatform()) {
@@ -21,15 +20,12 @@ function downloadBrowser(blob: Blob, filename: string) {
 
 async function downloadNative(blob: Blob, filename: string) {
   const base64 = await blobToBase64(blob)
-  const result = await Filesystem.writeFile({
+  await Filesystem.writeFile({
     path: filename,
     data: base64,
-    directory: Directory.Cache,
+    directory: Directory.Documents,
   })
-  await Share.share({
-    title: filename,
-    url: result.uri,
-  })
+  alert(`已保存到下载文件夹：${filename}`)
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
