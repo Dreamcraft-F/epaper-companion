@@ -4,6 +4,7 @@ import JSZip from 'jszip'
 import { normalizeNovel, formatChaptersIdx, formatBookMeta, makeBookId, decodeText } from '../core/book/normalize'
 import { parseBdf, uniqueCodepoints } from '../core/font/bdf-parser'
 import { buildEprfFont } from '../core/font/eprf-writer'
+import { downloadBlob } from '../core/download'
 
 const FONT_URL = '/fonts/wenquanyi_12pt.bdf'
 const SEED_URL = '/seed/reader_font_seed.txt'
@@ -96,9 +97,7 @@ export default function BookBuilder() {
     const zip = new JSZip()
     for (const f of result.files) zip.file(f.name, f.blob)
     const blob = await zip.generateAsync({ type: 'blob' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a'); a.href = url; a.download = `${result.bookId}.zip`; a.click()
-    URL.revokeObjectURL(url)
+    await downloadBlob(blob, `${result.bookId}.zip`)
   }, [result])
 
   return (

@@ -3,6 +3,7 @@ import { Download, Scissors } from 'lucide-react'
 import JSZip from 'jszip'
 import { formatPanelMeta, makePanelBundleId } from '../core/panel/convert'
 import { writeBmp1bit, thresholdPixels, imageDataToGrayscale } from '../core/bmp/writer'
+import { downloadBlob } from '../core/download'
 import ImageCropper from './common/ImageCropper'
 
 const MAX_ITEMS = 6
@@ -83,7 +84,7 @@ export default function PanelBuilder() {
       setStatus('done'); appendLog(`Done! ${files.length} files`)
       const zip = new JSZip(); for (const f of files) zip.file(f.name, f.blob)
       const blob = await zip.generateAsync({ type: 'blob' })
-      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download=`${bundleId}.zip`; a.click(); URL.revokeObjectURL(url)
+      await downloadBlob(blob, `${bundleId}.zip`)
     } catch (err) { setStatus('error'); appendLog(`Error: ${err instanceof Error ? err.message : String(err)}`) }
   }, [title, items, appendLog])
 
