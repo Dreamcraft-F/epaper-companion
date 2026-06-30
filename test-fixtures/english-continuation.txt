@@ -1,0 +1,14 @@
+Chapter 1
+
+This is a paragraph
+that continues on the next line
+and should be merged with spaces.
+
+This is a separate paragraph.
+
+Chapter 2
+
+The quick brown fox
+jumped over the lazy dog.
+It was a beautiful day
+for an adventure.
