@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EPaper</string>
+    <string name="title_activity_main">EPaper</string>
+    <string name="package_name">com.epaper.companion</string>
+    <string name="custom_url_scheme">com.epaper.companion</string>
+</resources>
