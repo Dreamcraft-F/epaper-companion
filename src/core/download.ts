@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core'
 import { Filesystem, Directory } from '@capacitor/filesystem'
-import { FilePicker } from '@capawesome/capacitor-file-picker'
+import { Share } from '@capacitor/share'
 
 export async function downloadBlob(blob: Blob, filename: string) {
   if (Capacitor.isNativePlatform()) {
@@ -20,20 +20,17 @@ function downloadBrowser(blob: Blob, filename: string) {
 }
 
 async function downloadNative(blob: Blob, filename: string) {
-  try {
-    const result = await FilePicker.pickDirectory()
-    if (!result.path) return
-
-    const base64 = await blobToBase64(blob)
-    await Filesystem.writeFile({
-      path: `${result.path}/${filename}`,
-      data: base64,
-      directory: Directory.ExternalStorage,
-    })
-    alert(`已保存：${result.path}/${filename}`)
-  } catch {
-    // user cancelled picker
-  }
+  const base64 = await blobToBase64(blob)
+  const result = await Filesystem.writeFile({
+    path: filename,
+    data: base64,
+    directory: Directory.Documents,
+  })
+  await Share.share({
+    title: filename,
+    url: result.uri,
+    dialogTitle: '保存文件',
+  })
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
